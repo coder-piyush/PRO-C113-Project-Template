@@ -9,20 +9,29 @@ import logging
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 
-from_dir = "/Users/Kuttimma/Downloads"
+from_dir = "C:/Users/asus/Downloads"
+
+
 
 # Event Hanlder Class
 class FileEventHandler(FileSystemEventHandler):
 
-    #1_on_created
+    # 1_on_created
+    def on_created(self,event):
+        print('Hey, {event.src_path} has been created!')
+    
+    # 2_on_deleted
+    def on_deleted(self,event):
+        print('Oops! Someone deleted {event.src_path}!')
 
-    #2_on_deleted
+    # 3_on_modified
+    def on_modified(self,event):
+        print('Hey There, {event.src_path} has been modified!')
+    
+    # 4_on_moved
+    def on_moved(self,event):
+        print('Oops! Someone moved {event.src_path} to {event.dest_path}!')
 
-    #3_on_modified
-
-    #4_on_moved
-
-        
 
 
 # Initialize Event Handler Class
@@ -39,14 +48,12 @@ observer.schedule(event_handler, from_dir, recursive=True)
 observer.start()
 
 
-#5_Write a exception for keyboardInterrupt
+# 5_Write a exception for keyboardInterrupt
 
-while True:
-    time.sleep(2)
-    print("running...")
-
-
-
-
-
-
+try:
+    while True:
+        time.sleep(2)
+        print("running...")
+except KeyboardInterrupt:
+    print("stopped!")
+    observer.stop()
